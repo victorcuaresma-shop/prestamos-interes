@@ -1,0 +1,112 @@
+<title>Calculadora de Préstamo</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="styles.css">
+
+<main class="wrap">
+  <header class="top">
+    <p class="eyebrow">Préstamo en soles · pagos a fin de mes</p>
+    <h1>Calculadora de préstamo</h1>
+    <p class="lead">Elige cuánto puedes pagar cada mes y mira en cuántos meses terminas y cuánto interés pagas en total.</p>
+  </header>
+
+  <div class="layout">
+    <section class="panel" aria-labelledby="t-datos">
+      <h2 id="t-datos">Datos del préstamo</h2>
+
+      <div class="field">
+        <label for="monto">Monto prestado</label>
+        <div class="input-unit"><span>S/</span><input id="monto" type="number" inputmode="decimal" min="100" step="100" value="10000"></div>
+      </div>
+
+      <div class="field">
+        <label for="tasa">Tasa de interés</label>
+        <div class="row">
+          <div class="input-unit"><input id="tasa" type="number" inputmode="decimal" min="0" step="0.1" value="3"><span>%</span></div>
+          <select id="tipoTasa" aria-label="Tipo de tasa">
+            <option value="mensual">por mes</option>
+            <option value="anual" selected>por año</option>
+          </select>
+        </div>
+        <p class="hint" id="tasaHint"></p>
+      </div>
+
+      <div class="field">
+        <label for="cuota">Pago mensual</label>
+        <div class="cuota-box">
+          <div class="input-unit"><span>S/</span><input id="cuota" type="number" inputmode="decimal" min="500" max="800" step="10" value="500"></div>
+          <input id="cuotaRango" type="range" min="500" max="800" step="10" value="500" aria-label="Pago mensual entre 500 y 800 soles">
+          <div class="range-ends"><span>S/ 500</span><span>S/ 800</span></div>
+        </div>
+      </div>
+
+      <div class="field">
+        <label for="fechaInicio">Fecha del préstamo</label>
+        <input id="fechaInicio" type="date">
+      </div>
+
+      <div class="field">
+        <label for="primerPago">Primer pago</label>
+        <select id="primerPago">
+          <option value="0">Fin de este mes</option>
+          <option value="1" selected>Fin del mes siguiente</option>
+        </select>
+        <p class="hint">Los pagos caen el último día de cada mes: 30 o 31, y 28 o 29 en febrero.</p>
+      </div>
+    </section>
+
+    <section class="results" aria-live="polite">
+      <div id="aviso" class="aviso" hidden></div>
+
+      <div class="kpis">
+        <div class="kpi kpi-main">
+          <span class="kpi-label">Tiempo para pagar</span>
+          <strong class="kpi-value" id="kMeses">—</strong>
+          <span class="kpi-sub" id="kMesesSub"></span>
+        </div>
+        <div class="kpi">
+          <span class="kpi-label">Intereses totales</span>
+          <strong class="kpi-value num" id="kInteres">—</strong>
+          <span class="kpi-sub" id="kInteresSub"></span>
+        </div>
+        <div class="kpi">
+          <span class="kpi-label">Total a devolver</span>
+          <strong class="kpi-value num" id="kTotal">—</strong>
+          <span class="kpi-sub" id="kTotalSub"></span>
+        </div>
+      </div>
+
+      <div class="split" aria-hidden="true">
+        <div class="split-bar"><span id="barCapital"></span><span id="barInteres"></span></div>
+        <div class="split-legend"><span class="dot cap"></span><span id="legCapital"></span><span class="dot int"></span><span id="legInteres"></span></div>
+      </div>
+
+      <div class="card">
+        <h2>Compara según el pago mensual</h2>
+        <p class="hint">Toca una fila para usar ese pago.</p>
+        <div class="scroll">
+          <table id="comparar">
+            <thead><tr><th>Pago mensual</th><th>Meses</th><th>Intereses</th><th>Total</th><th>Último pago</th></tr></thead>
+            <tbody></tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="card">
+        <h2>Calendario de pagos</h2>
+        <div class="scroll tall">
+          <table id="calendario">
+            <thead><tr><th>#</th><th>Fecha</th><th>Pago</th><th>Interés</th><th>Capital</th><th>Saldo</th></tr></thead>
+            <tbody></tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <footer class="foot">Cálculo con cuota fija. El interés de cada mes se calcula sobre el saldo pendiente. El último pago se ajusta al saldo que queda. Es una simulación; el contrato de tu prestamista manda.</footer>
+</main>
+
+<script src="script.js"></script>
